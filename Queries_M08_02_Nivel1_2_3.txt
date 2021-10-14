@@ -1,0 +1,42 @@
+-- Nivel 1--
+use usairlineflights;
+
+-- Exercici 1:--
+select count(*) as total from flights;
+
+-- Exercici 2:--
+select origin,AVG(ArrDelay) as prom_arribades,AVG(DepDelay) as prom_sortides from flights group by origin;
+
+-- Exercici 3:--
+select origin,colYear,colMonth,AVG(ArrDelay) as prom_arribades from flights group by origin,colYear,colMonth;
+
+-- Exercici 4:--
+select usairports.City,colYear,colMonth,AVG(ArrDelay) as prom_arribades from flights 
+inner join usairports on flights.origin = usairports.IATA
+group by origin,colYear,colMonth
+order by usairports.City,colYear,colMonth;
+
+-- Exercici 5:--
+select UniqueCarrier,colYear,colMonth,sum(Cancelled) as total_cancelled from flights  where Cancelled>0 group by UniqueCarrier,ColMonth,ColYear order by total_cancelled desc;
+
+-- Exercici 6:--
+select TailNum,sum(Distance) as totalDistance from flights where AirTime>0 group by TailNum order by totalDistance Desc limit 10;
+
+
+-- Nivel 2--
+
+-- Exercici 7:--
+select UniqueCarrier,avg(ArrDelay) as avgDelay 
+from flights 
+group by UniqueCarrier 
+having avg(ArrDelay)>10 
+order by avgDelay Desc;
+
+
+-- Nivel 3--
+select UniqueCarrier,avg(ArrDelay) as avgDelay 
+into outfile 'M08_02_Nivel3.csv'
+from flights 
+group by UniqueCarrier 
+having avg(ArrDelay)>10 
+order by avgDelay Desc;
